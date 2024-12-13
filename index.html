@@ -33,6 +33,12 @@
             color: #333;
         }
 
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
         .card button {
             background-color: #5f79a0;
             border: none;
@@ -42,11 +48,16 @@
             border-radius: 5px;
             cursor: pointer;
             color: #ffffff;
-            margin-top: 20px;
+            margin: 20px auto 0;
+            display: block;
         }
 
         .card button:hover {
             background-color: #4a637e;
+        }
+
+        #revealButton {
+            display: block;
         }
 
         .message {
@@ -71,22 +82,13 @@
             margin: 20px auto 0 auto;
         }
 
-        #revealButton {
-            display: block;
-            margin: 0 auto;
-        }
-
-        #revealButton.reset {
-            display: block;
-        }
-
         .heart {
             position: absolute;
             width: 35px;
             height: 35px;
             background-color: #5360FD;
             transform: rotate(45deg);
-            animation: scatter 2.5s ease-out forwards, splashEffect 2.5s ease-out;
+            animation: scatter 2.5s ease-out forwards, sparkle 1.5s infinite;
         }
 
         .heart::before,
@@ -109,6 +111,83 @@
             top: 0;
         }
 
+        .ribbon {
+            position: absolute;
+            width: 200px;
+            height: 20px;
+            background-color: #5360FD;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .ribbon::before,
+        .ribbon::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .ribbon::before {
+            border-width: 10px 10px 0 0;
+            border-color: #5360FD transparent transparent transparent;
+            top: 100%;
+            left: 0;
+        }
+
+        .ribbon::after {
+            border-width: 10px 0 0 10px;
+            border-color: #5360FD transparent transparent transparent;
+            top: 100%;
+            right: 0;
+        }
+
+        .ear-left, .ear-right {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 50px solid #5360FD;
+            top: -50px;
+        }
+
+        .ear-left {
+            left: 10px;
+            transform: rotate(-25deg);
+        }
+
+        .ear-right {
+            right: 10px;
+            transform: rotate(25deg);
+        }
+
+        .flower {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at 50% 50%, #FF6363 30%, transparent 60%);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .flower:before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #FFC0CB;
+            border-radius: 50%;
+            top: 10px;
+            left: 10px;
+        }
+
+        .flower3 { bottom: 30px; left: 10%; }
+        .flower4 { bottom: 30px; right: 10%; }
+
         @keyframes scatter {
             0% {
                 opacity: 1;
@@ -120,47 +199,31 @@
             }
         }
 
-        @keyframes splashEffect {
-            0% {
-                filter: hue-rotate(0deg);
-            }
-            100% {
-                filter: hue-rotate(360deg);
-            }
-        }
-
-        .sparkle {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background-color: gold;
-            border-radius: 50%;
-            animation: sparkleEffect 1.5s ease-in-out forwards;
-        }
-
-        @keyframes sparkleEffect {
-            0% {
-                opacity: 1;
-                transform: scale(0.5);
+        @keyframes sparkle {
+            0%, 100% {
+                filter: brightness(1);
             }
             50% {
-                opacity: 0.7;
-                transform: scale(1.5);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0);
+                filter: brightness(2);
             }
         }
     </style>
 </head>
 <body>
     <div class="card">
+        <div class="ear-left"></div>
+        <div class="ear-right"></div>
+        <img src="special1.jpg" alt="Class Picture 1">
         <h1>Hello, Ma'am Roan!</h1>
         <button id="revealButton">Click this!</button>
         <p class="message" id="message">Advance Merry Christmas po. I really am thankful kasi naeenjoy ko yung subject niyo kahit sa una 
             ay nahihirapan ako. But as time goes by, I learned a lot from your subject. And I really do appreciate your passion and hard work 
-            just to find an alternative way for us to understand every lesson. Take care and keep safe po sa inyo ni Sir.</p>
+            just to find an alternative way for us to understand every lesson. 'Di na nga po kami nakapag solicit kanina po and nagalit po kayo
+            sa amin but we understand naman po kasi iniisip niyo rin kami na hangga't kaya niyo po na pagsabayin pipilitin niyo para lang makauwi kami ng maaga. 
+            Anyway, Take care always and keep safe po sa inyo ni Sir.</p>
+        <img src="special2.jpg" alt="Class Picture 2" class="message">
+        <div class="flower flower3"></div>
+        <div class="flower flower4"></div>
         <button id="closeButton" class="message">Close</button>
     </div>
 
@@ -174,14 +237,8 @@
             closeButton.classList.add('active');
             revealButton.style.display = 'none';
 
-            // Add hearts scatter effect outside the letter
             for (let i = 0; i < 30; i++) {
                 createHeart();
-            }
-
-            // Add sparkle effect inside the letter
-            for (let i = 0; i < 15; i++) {
-                createSparkle();
             }
         });
 
@@ -203,18 +260,6 @@
             setTimeout(() => {
                 heart.remove();
             }, 2500);
-        }
-
-        function createSparkle() {
-            const sparkle = document.createElement('div');
-            sparkle.classList.add('sparkle');
-            sparkle.style.left = `${Math.random() * 90 + 5}%`;
-            sparkle.style.top = `${Math.random() * 90 + 5}%`;
-            message.appendChild(sparkle);
-
-            setTimeout(() => {
-                sparkle.remove();
-            }, 1500);
         }
     </script>
 </body>
