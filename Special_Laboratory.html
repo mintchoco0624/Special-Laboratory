@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronic Card</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle, #ffffff, #5f79a0, #898bbd);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .card {
+            background-color: #f5f5f5;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            width: 400px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card h1 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .card button {
+            background-color: #5f79a0;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #ffffff;
+            margin-top: 20px;
+        }
+
+        .card button:hover {
+            background-color: #4a637e;
+        }
+
+        .message {
+            display: none;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #444;
+            position: relative;
+        }
+
+        .message.active {
+            display: block;
+        }
+
+        #closeButton {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #closeButton.active {
+            display: block;
+            margin: 20px auto 0 auto;
+        }
+
+        #revealButton {
+            display: block;
+            margin: 0 auto;
+        }
+
+        #revealButton.reset {
+            display: block;
+        }
+
+        .heart {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background-color: #5360FD;
+            transform: rotate(45deg);
+            animation: scatter 2.5s ease-out forwards, splashEffect 2.5s ease-out;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background-color: #5360FD;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -17.5px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: -17.5px;
+            top: 0;
+        }
+
+        @keyframes scatter {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(-50px + 100px * var(--random-x)), calc(-50px + 100px * var(--random-y))) scale(0.5);
+            }
+        }
+
+        @keyframes splashEffect {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: gold;
+            border-radius: 50%;
+            animation: sparkleEffect 1.5s ease-in-out forwards;
+        }
+
+        @keyframes sparkleEffect {
+            0% {
+                opacity: 1;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.5);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Hello, Ma'am Roan!</h1>
+        <button id="revealButton">Click this!</button>
+        <p class="message" id="message">Advance Merry Christmas po. I really am thankful kasi naeenjoy ko yung subject niyo kahit sa una 
+            ay nahihirapan ako. But as time goes by, I learned a lot from your subject. And I really do appreciate your passion and hard work 
+            just to find an alternative way for us to understand every lesson. Take care and keep safe po sa inyo ni Sir.</p>
+        <button id="closeButton" class="message">Close</button>
+    </div>
+
+    <script>
+        const revealButton = document.getElementById('revealButton');
+        const closeButton = document.getElementById('closeButton');
+        const message = document.getElementById('message');
+
+        revealButton.addEventListener('click', () => {
+            message.classList.add('active');
+            closeButton.classList.add('active');
+            revealButton.style.display = 'none';
+
+            // Add hearts scatter effect outside the letter
+            for (let i = 0; i < 30; i++) {
+                createHeart();
+            }
+
+            // Add sparkle effect inside the letter
+            for (let i = 0; i < 15; i++) {
+                createSparkle();
+            }
+        });
+
+        closeButton.addEventListener('click', () => {
+            message.classList.remove('active');
+            closeButton.classList.remove('active');
+            revealButton.style.display = 'block';
+        });
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.setProperty('--random-x', Math.random());
+            heart.style.setProperty('--random-y', Math.random());
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.top = `${Math.random() * 100}%`;
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 2500);
+        }
+
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = `${Math.random() * 90 + 5}%`;
+            sparkle.style.top = `${Math.random() * 90 + 5}%`;
+            message.appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
